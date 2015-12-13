@@ -6,8 +6,8 @@ def sigmoid_func(z):
     return 1./base
 
 def cost_func(theta, X, y):
-	""" 
-	This is the cost function
+    """ 
+    This is the cost function
     @param X: X Matrix
     @param y: actual result y
     @param theta: feature params or called coefficient, in this case is a [[theta1], [theta2], ... , [thetaj]]  matrix, eg. [[theta1], [theta2]]
@@ -20,7 +20,7 @@ def cost_func(theta, X, y):
 
 def grad(theta, X, y):
     """ 
-	This is the function to compute the gradient, if X has n columns or coefficient has n features, the gradient should be a (n,1) matrix/n dimension array
+    This is the function to compute the gradient, if X has n columns or coefficient has n features, the gradient should be a (n,1) matrix/n dimension array
     @param X: X Matrix
     @param y: actual result y
     @param theta: feature params or called coefficient, in this case is a [[theta1], [theta2], ... , [thetaj]]  matrix, eg. [[theta1], [theta2]]
@@ -48,7 +48,7 @@ def feature_scalling(X):
 
 def score(X, theta):
     """ 
-	This is the score function which use the trained formula to determine the result
+    This is the score function which use the trained formula to determine the result
     @param X: X Matrix
     @param theta: feature params or called coefficient, in this case is a [[theta1], [theta2], ... , [thetaj]]  matrix, eg. [[theta1], [theta2]]
     """
@@ -67,7 +67,7 @@ def score(X, theta):
 
 def train(X, theta, y):
     """ 
-	This is the training function, use fmin_bfgs algorithm in scipy.optimize to get the minimize result
+    This is the training function, use fmin_bfgs algorithm in scipy.optimize to get the minimize result
     @param X: X Matrix
     @param y: actual result y
     @param theta: feature params or called coefficient, in this case is a [[theta1], [theta2], ... , [thetaj]]  matrix, eg. [[theta1], [theta2]]
