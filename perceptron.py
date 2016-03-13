@@ -4,9 +4,9 @@ class Perceptron:
 
     def __init__(self, alpha):
         self.alpha = alpha # learning rate
+
     def classify(self, x):
         return np.dot(self.w, x)+self.b
-
 
     def is_error_point(self, x, y):
         return self.classify(x)*y<=0
@@ -26,14 +26,7 @@ class Perceptron:
             is_all_sep = True
             iterations = iterations + 1
             for i in range(0, train_size):
-                x_2d = x_[i,:]
-                print x_2d
-                print x_2d.shape
-                x = x_2d.flatten()
-                print "x: "
-                print x
-                print "x shape: "
-                print x.shape
+                x = x_[i,:].A1
                 y = y_[i]
                 if self.is_error_point(x, y):
                     is_all_sep = False
@@ -41,6 +34,7 @@ class Perceptron:
                     break
             if iterations > 100000:
                 break
+        return iterations
 
     def print_weight(self):
         print "weight: "
@@ -54,14 +48,12 @@ if __name__ == "__main__":
     x_ = np.matrix([[1.,1.,1.],[-4.,0.,0.5],[-1.,-0.5,-1.]])
     y_ = np.array([1.,-1.,-1.])
     test = np.matrix([[1,2,3]])
-    print test
-    print test.shape
-    print test.flatten().shape
     perceptron = Perceptron(0.3)
-    perceptron.train(x_, y_)
+    iterations = perceptron.train(x_, y_)
     perceptron.print_weight()
     perceptron.print_bias()
-    print perceptron.classify(x_[0,:])
-    print perceptron.classify(x_[1,:])
-    print perceptron.classify(x_[2,:])
+    print perceptron.classify(x_[0,:].A1)
+    print perceptron.classify(x_[1,:].A1)
+    print perceptron.classify(x_[2,:].A1)
 
+    print 'iterations: %d' % iterations
