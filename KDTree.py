@@ -1,4 +1,4 @@
-import numpy as as np
+import numpy as np
 class KDNode:
     def __init__(self, val):
         self.val = val
@@ -56,22 +56,22 @@ class KDTree:
         return node
 
     def search(node, x, depth):
-        if (node.left == None && node.right == None):
+        if (node.left == None and node.right == None):
             nearest = node
             return nearest
         else:
             axis = depth % n
-            if (x[axis] < node.val[axis] && node.left != None):
+            if (x[axis] < node.val[axis] and node.left != None):
                 nearest = search(node.left, x, depth+1):
                 if (self.dist(node.val, x) < self.dist(nearest.val, x)):
                     nearest = node
-                if (node.right != None && self.dist(node.right.val, x) <= self.dist(nearest.val, x)):
+                if (node.right != None and self.dist(node.right.val, x) <= self.dist(nearest.val, x)):
                     nearest = search(node.right, x, depth+1)
                 return nearest
-            else if (x[axis] >= node.val[axis] && node.right != None):
+            else if (x[axis] >= node.val[axis] and node.right != None):
                 nearest = search(node.right, x, depth+1)
                 if (self.dist(node.val, x) < self.dist(nearest.val, x)):
                     nearest = node
-                if (node.left != None && self.dist(node.left.val, x) <= self.dist(nearest.val, x)):
+                if (node.left != None and self.dist(node.left.val, x) <= self.dist(nearest.val, x)):
                     nearest = search(node.right, x, depth+1)
                 return nearest
