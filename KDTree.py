@@ -3,10 +3,10 @@ class KDNode:
     def __init__(self, val):
         self.val = val
     
-    def setLeft(left):
+    def setLeft(self, left):
         self.left = left
 
-    def setRight(right):
+    def setRight(self, right):
         self.right = right
 
 class KDTree:
@@ -16,17 +16,25 @@ class KDTree:
     def __init__(self, dataset):
         self.root = self.buildTree(dataset, 0)
         
-    def dist(x,y):   
+    def dist(self, x,y):   
         return np.sqrt(np.sum((x-y)**2))
 
-    def buildTree(dataset, depth):
+    def buildTree(self, dataset, depth):
+        if dataset == None:
+            "leaves, return"
+            return None
+        #print "dataset"
+        #print dataset
         m = dataset.shape[0]
         n = dataset.shape[1]
 
         axis = depth % n
         col = dataset[:, axis].A1
+        #print "col"
+        #print col
         sorted_col = np.sort(col)
         median = sorted_col[sorted_col.size / 2]
+        print ("depth %d axis %d median %d" %(axis, depth, median))
         for i in range(0, m):
             if (col[i] == median):
                 domain_row_index = i
@@ -37,41 +45,68 @@ class KDTree:
         right_list = []
         for i in range(0, m):
             row = dataset[i, :].getA1().tolist()
-            if (row[col] < median):
-                left_list = left_list.append(row)
+            #print "row"
+            #print row
+            if (row[axis] < median):
+                left_list.append(row)
+             #   print "left_list"
+              #  print left_list
                 #node.setLeft(buildTree(new_dataset, depth+1))
             else:
-                right_list = right_list.append(row)
-        if not left_lsit:
+                right_list.append(row)
+               # print "right_list"
+                #print right_list
+        if len(left_list) != 0:
+            print "not empty left list"
             left_dataset = np.matrix(left_list)
-            node.setLeft(buildTree(left_dataset, depth+1))
+            node.setLeft(self.buildTree(left_dataset, depth+1))
         else:
-            node.setLeft(None)
+            node.setLeft(self.buildTree(None, depth+1))
 
-        if not right_list:
+        if len(right_list) != 0:
+            print "not empty right list"
             right_dataset = np.matrix(right_list)
-            node.setRight(buildTree(right_dataset, depth+1))
+            node.setRight(self.buildTree(right_dataset, depth+1))
         else:
-              node.setRight(None)
+            node.setRight(self.buildTree(None, depth+1))
         return node
 
-    def search(node, x, depth):
+    def searchNearest(self, node, x, depth):
         if (node.left == None and node.right == None):
             nearest = node
             return nearest
         else:
             axis = depth % n
             if (x[axis] < node.val[axis] and node.left != None):
-                nearest = search(node.left, x, depth+1):
+                nearest = self.searchNearest(node.left, x, depth+1)
                 if (self.dist(node.val, x) < self.dist(nearest.val, x)):
                     nearest = node
                 if (node.right != None and self.dist(node.right.val, x) <= self.dist(nearest.val, x)):
-                    nearest = search(node.right, x, depth+1)
+                    nearest = self.searchNearest(node.right, x, depth+1)
                 return nearest
-            else if (x[axis] >= node.val[axis] and node.right != None):
-                nearest = search(node.right, x, depth+1)
+            elif (x[axis] >= node.val[axis] and node.right != None):
+                nearest = self.searchNearest(node.right, x, depth+1)
                 if (self.dist(node.val, x) < self.dist(nearest.val, x)):
                     nearest = node
                 if (node.left != None and self.dist(node.left.val, x) <= self.dist(nearest.val, x)):
-                    nearest = search(node.right, x, depth+1)
+                    nearest = self.searchNearest(node.right, x, depth+1)
                 return nearest
+
+    def traverse(self, node, visited):
+        if (node == None):
+            visited.append(None)
+            print visited
+            return visited
+        else:
+            visited.append(node.val)
+            visited = self.traverse(node.left, visited)
+            visited = self.traverse(node.right, visited)
+            print visited
+            return visited
+
+if __name__ == "__main__":
+    dataset = np.matrix([[2.,3.],[5.,4.],[9.,6.],[4.,7.],[8.,1.],[7.,2.]])
+    tree = KDTree(dataset)
+
+    visited = tree.traverse(tree.root, [])
+    print visited
