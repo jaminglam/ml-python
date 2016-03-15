@@ -20,11 +20,8 @@ class KDTree:
         return np.sqrt(np.sum((x-y)**2))
 
     def buildTree(self, dataset, depth):
-        if dataset == None:
-            "leaves, return"
+        if dataset is None:
             return None
-        #print "dataset"
-        #print dataset
         m = dataset.shape[0]
         n = dataset.shape[1]
 
@@ -34,7 +31,6 @@ class KDTree:
         #print col
         sorted_col = np.sort(col)
         median = sorted_col[sorted_col.size / 2]
-        print ("depth %d axis %d median %d" %(axis, depth, median))
         for i in range(0, m):
             if (col[i] == median):
                 domain_row_index = i
@@ -44,31 +40,23 @@ class KDTree:
         left_list = []
         right_list = []
         for i in range(0, m):
+            if (i == domain_row_index):
+                continue
             row = dataset[i, :].getA1().tolist()
-            #print "row"
-            #print row
             if (row[axis] < median):
                 left_list.append(row)
-             #   print "left_list"
-              #  print left_list
-                #node.setLeft(buildTree(new_dataset, depth+1))
             else:
                 right_list.append(row)
-               # print "right_list"
-                #print right_list
         if len(left_list) != 0:
-            print "not empty left list"
             left_dataset = np.matrix(left_list)
-            node.setLeft(self.buildTree(left_dataset, depth+1))
         else:
-            node.setLeft(self.buildTree(None, depth+1))
-
+            left_dataset = None
         if len(right_list) != 0:
-            print "not empty right list"
             right_dataset = np.matrix(right_list)
-            node.setRight(self.buildTree(right_dataset, depth+1))
         else:
-            node.setRight(self.buildTree(None, depth+1))
+            right_dataset = None
+        node.setLeft(self.buildTree(left_dataset, depth+1))
+        node.setRight(self.buildTree(right_dataset, depth+1))
         return node
 
     def searchNearest(self, node, x, depth):
@@ -92,16 +80,17 @@ class KDTree:
                     nearest = self.searchNearest(node.right, x, depth+1)
                 return nearest
 
+    """
+       traverse is a pre-order traversal
+    """
     def traverse(self, node, visited):
         if (node == None):
             visited.append(None)
-            print visited
             return visited
         else:
             visited.append(node.val)
             visited = self.traverse(node.left, visited)
             visited = self.traverse(node.right, visited)
-            print visited
             return visited
 
 if __name__ == "__main__":
