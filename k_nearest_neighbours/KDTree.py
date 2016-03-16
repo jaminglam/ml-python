@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 class KDNode:
     def __init__(self, val):
@@ -116,13 +117,31 @@ class KDTree:
             visited = self.traverse(node.right, visited)
             return visited
 
-if __name__ == "__main__":
-    dataset = np.matrix([[2.,3.],[5.,4.],[9.,6.],[4.,7.],[8.,1.],[7.,2.]])
-    tree = KDTree(dataset)
+def linear_serach_nn(dataset, x):
+    m = dataset.shape[0]
+    min_dist = float("inf")
+    for i in range(0, m):
+        row = dataset[i, :].A1
+        dist = np.sqrt(np.sum((x-row)**2))
+        if (dist <= min_dist):
+            min_dist = dist
+            nearest = row
+    return nearest, min_dist
 
+if __name__ == "__main__":
+    dataset = np.asmatrix(np.genfromtxt('rand_benchmark1.csv', delimiter=','))
+    tree = KDTree(dataset)
+    start_time = time.clock()
+    print "start time: %f" %start_time
     #visited = tree.traverse(tree.root, [])
     #print visited
-    x = [8.,2.]
-    x_node = KDNode(x)
-    nearest, min_dist = tree.nn(tree.root, x_node, 0, tree.root, tree.node_dist(tree.root, x_node))
-    print ("nearest %s min_dist %d" %(nearest.val, min_dist))
+
+    for i in range(0,10):
+        x = np.random.rand(1,50).flatten()
+        x_node = KDNode(x)
+        nearest, min_dist = tree.nn(tree.root, x_node, 0, tree.root, tree.node_dist(tree.root, x_node))
+        print ("nearest %s min_dist %f" %(nearest.val, min_dist))
+
+    end_time = time.clock()
+    print "end_time: %f" %end_time
+    print "process time: %f" %((end_time - start_time)/10)
